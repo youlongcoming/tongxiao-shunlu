@@ -1,0 +1,164 @@
+<view class="page rides-page">
+  <view class="list-header">
+    <view class="school-scope" bindtap="changeSchool">{{schoolName}}<text>切换学校</text></view>
+    <view class="list-title">找到合适的同行伙伴</view>
+    <view class="list-subtitle">输入路线与时间，优先找到最合适的行程</view>
+  </view>
+
+  <view class="match-card card">
+    <view class="match-heading">
+      <view>
+        <view class="match-title">智能匹配</view>
+        <view class="match-caption">{{cloudMessage}}</view>
+      </view>
+      <view wx:if="{{isMatching}}" class="clear-match" bindtap="clearMatch">清除结果</view>
+    </view>
+
+    <view class="match-route">
+      <view class="match-location-row">
+        <view class="match-dot match-dot-start"></view>
+        <view class="match-input-wrap">
+          <input
+            class="match-input"
+            placeholder="出发地，例如：本校校园"
+            value="{{matchForm.from}}"
+            data-field="from"
+            bindinput="onMatchInput"
+            bindblur="onMatchBlur"
+            maxlength="30"
+          />
+          <view wx:if="{{fromSuggestions.length}}" class="location-suggestions">
+            <view class="suggestions-caption">已发布行程中的出发地</view>
+            <view
+              wx:for="{{fromSuggestions}}"
+              wx:key="*this"
+              class="location-suggestion"
+              data-field="from"
+              data-value="{{item}}"
+              catchtap="selectLocationSuggestion"
+            >{{item}}</view>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{!fromSuggestions.length}}" class="match-route-line"></view>
+      <view class="match-location-row">
+        <view class="match-dot match-dot-end"></view>
+        <view class="match-input-wrap">
+          <input
+            class="match-input"
+            placeholder="目的地，例如：高铁站"
+            value="{{matchForm.to}}"
+            data-field="to"
+            bindinput="onMatchInput"
+            bindblur="onMatchBlur"
+            maxlength="30"
+          />
+          <view wx:if="{{toSuggestions.length}}" class="location-suggestions">
+            <view class="suggestions-caption">已发布行程中的目的地</view>
+            <view
+              wx:for="{{toSuggestions}}"
+              wx:key="*this"
+              class="location-suggestion"
+              data-field="to"
+              data-value="{{item}}"
+              catchtap="selectLocationSuggestion"
+            >{{item}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="match-date-row">
+      <picker class="match-picker" mode="date" value="{{matchForm.date}}" bindchange="onMatchDateChange">
+        <view class="match-picker-value">
+          <view class="picker-label">出发日期</view>
+          <view>{{matchForm.date}}</view>
+        </view>
+      </picker>
+      <picker class="match-picker" mode="time" value="{{matchForm.startTime}}" data-field="startTime" bindchange="onMatchTimeChange">
+        <view class="match-picker-value">
+          <view class="picker-label">最早</view>
+          <view>{{matchForm.startTime}}</view>
+        </view>
+      </picker>
+      <picker class="match-picker" mode="time" value="{{matchForm.endTime}}" data-field="endTime" bindchange="onMatchTimeChange">
+        <view class="match-picker-value">
+          <view class="picker-label">最晚</view>
+          <view>{{matchForm.endTime}}</view>
+        </view>
+      </picker>
+    </view>
+
+    <button class="match-button" hover-class="match-button-pressed" bindtap="findMatches">查找最合适的拼车</button>
+    <view wx:if="{{matchSummary}}" class="match-summary">{{matchSummary}}</view>
+  </view>
+
+  <scroll-view class="filter-scroll" scroll-x="true" enable-flex="true">
+    <view class="filters">
+      <view
+        wx:for="{{filters}}"
+        wx:key="*this"
+        class="filter-pill {{activeFilter === item ? 'filter-active' : ''}}"
+        data-filter="{{item}}"
+        bindtap="selectFilter"
+      >{{item}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="result-count">
+    <text>{{isMatching ? '匹配结果' : '全部行程'}} · 共 {{visibleRides.length}} 条</text>
+  </view>
+
+  <view wx:if="{{visibleRides.length}}">
+    <view wx:for="{{visibleRides}}" wx:key="id" class="ride-item card {{item.isBestMatch ? 'best-match' : ''}}">
+      <view wx:if="{{item.isBestMatch}}" class="best-match-badge">最佳匹配</view>
+      <view class="ride-heading">
+        <view>
+          <text class="direction-tag">{{item.direction}}</text>
+          <text class="type-text">发布</text>
+        </view>
+        <text class="ride-status status-{{item.statusTone}}">{{item.seatsLabel}}</text>
+      </view>
+
+      <view class="timeline">
+        <view class="timeline-track">
+          <view class="timeline-dot dot-start"></view>
+          <view class="timeline-line"></view>
+          <view class="timeline-dot dot-end"></view>
+        </view>
+        <view class="locations">
+          <view class="location-row">
+            <view class="time">{{item.time}}</view>
+            <view class="location-name">{{item.from}}</view>
+          </view>
+          <view class="location-row destination-row">
+            <view class="time muted">到达</view>
+            <view class="location-name">{{item.to}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="ride-note">{{item.note}}</view>
+
+      <view class="ride-footer">
+        <view class="owner-block">
+          <image wx:if="{{item.ownerAvatar}}" class="avatar avatar-image" src="{{item.ownerAvatar}}" mode="aspectFill"></image>
+          <view wx:else class="avatar">{{item.ownerInitial}}</view>
+          <view>
+            <view class="owner-name">{{item.owner}}</view>
+            <view class="ride-date">{{item.date}}</view>
+          </view>
+        </view>
+        <button class="contact-button" size="mini" data-id="{{item.id}}" loading="{{joiningRideId === item.id}}" bindtap="handleRideAction">{{item.actionText}}</button>
+      </view>
+    </view>
+    <button wx:if="{{hasMoreCloud && !isMatching}}" class="load-more-button" loading="{{loadingMore}}" bindtap="loadMoreCloudRides">加载更多云端行程</button>
+  </view>
+
+  <view wx:else class="empty-state card">
+    <view class="empty-icon">路线</view>
+    <view>{{isMatching ? '没有符合当前时间和地点的行程' : '该分类暂时没有行程'}}</view>
+    <view wx:if="{{isMatching}}" class="empty-hint">可以扩大时间范围或减少地点关键词后重试</view>
+  </view>
+</view>
+

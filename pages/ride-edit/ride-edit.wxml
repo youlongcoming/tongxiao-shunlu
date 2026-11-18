@@ -1,0 +1,37 @@
+<view class="page edit-page">
+  <view wx:if="{{loading}}" class="loading-state">正在读取行程…</view>
+  <view wx:if="{{form}}" class="edit-card">
+    <view class="field-label">行程方向</view>
+    <view class="option-row">
+      <view wx:for="{{directions}}" wx:key="*this" class="option {{form.direction === item ? 'selected' : ''}}" data-field="direction" data-value="{{item}}" bindtap="selectValue">{{item}}</view>
+    </view>
+
+    <view class="field-label field-gap">路线</view>
+    <input class="field-input {{form.direction === '出校' ? 'field-input-locked' : ''}}" placeholder="{{form.direction === '出校' ? '已自动使用学校名称' : '出发地'}}" value="{{form.from}}" data-field="from" bindinput="onInput" maxlength="30" disabled="{{form.direction === '出校'}}" />
+    <input class="field-input field-gap-small {{form.direction === '返校' ? 'field-input-locked' : ''}}" placeholder="{{form.direction === '返校' ? '已自动使用学校名称' : '目的地'}}" value="{{form.to}}" data-field="to" bindinput="onInput" maxlength="30" disabled="{{form.direction === '返校'}}" />
+    <view wx:if="{{form.direction !== '周边'}}" class="route-auto-note">学校端已自动使用「{{schoolName}}」，无需重复填写。</view>
+
+    <view class="field-grid field-gap">
+      <picker class="field-half" mode="date" value="{{form.date}}" bindchange="onDateChange"><view class="picker-value">{{form.date}}</view></picker>
+      <picker class="field-half" mode="time" value="{{form.time}}" bindchange="onTimeChange"><view class="picker-value">{{form.time}}</view></picker>
+    </view>
+
+    <view class="field-grid field-gap">
+      <view class="stepper field-half">
+        <view class="step-button" data-delta="-1" bindtap="changeSeats">−</view>
+        <view>{{form.seats}} 座</view>
+        <view class="step-button" data-delta="1" bindtap="changeSeats">＋</view>
+      </view>
+    </view>
+
+    <view class="field-label field-gap">发布人</view>
+    <view class="owner-readonly">
+      <view class="owner-name">{{form.owner || '尚未设置称呼'}}</view>
+      <view class="owner-edit" bindtap="goProfile">修改</view>
+    </view>
+    <view class="field-help">称呼自动使用“我的”页面名称。</view>
+    <view class="field-label field-gap">补充说明</view>
+    <textarea class="note-input" value="{{form.note}}" data-field="note" bindinput="onInput" maxlength="120"></textarea>
+    <button class="save-button" loading="{{saving}}" disabled="{{saving}}" bindtap="saveRide">保存修改</button>
+  </view>
+</view>

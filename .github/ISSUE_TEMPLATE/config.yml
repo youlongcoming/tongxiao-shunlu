@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 部署与云开发问题
+    url: https://github.com/youlongcoming/tongxiao-shunlu/blob/main/docs/CLOUD_SETUP.md
+    about: 先看部署说明、数据集合和云函数配置，再开 issue。
+  - name: 安全漏洞
+    url: https://github.com/youlongcoming/tongxiao-shunlu/security/policy
+    about: 不要公开披露漏洞；请按 SECURITY.md 私下报告。

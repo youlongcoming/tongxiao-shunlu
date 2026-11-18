@@ -1,0 +1,72 @@
+<view wx:if="{{cloudMode}}" class="chat-page">
+  <view wx:if="{{!groupMode && otherUser}}" class="cloud-user-card">
+    <image wx:if="{{otherUser.avatar}}" class="cloud-user-avatar" src="{{otherUser.avatar}}" mode="aspectFill"></image>
+    <view wx:else class="cloud-user-avatar cloud-user-avatar-text">{{chatAvatarText}}</view>
+    <view class="cloud-user-info">
+      <view class="cloud-user-name">{{otherUser.name}}</view>
+      <view class="cloud-user-detail">{{otherUser.grade || '同学'}} · {{otherUser.major || '专业未填写'}}</view>
+    </view>
+    <view class="cloud-user-actions">
+      <view class="online-badge">云端会话</view>
+      <view wx:if="{{contactPhone}}" class="chat-call-button" catchtap="callContact">{{contactLabel}}</view>
+      <view wx:else class="chat-call-button chat-call-disabled">未留电话</view>
+    </view>
+  </view>
+
+  <view wx:if="{{groupMode}}" class="cloud-user-card group-chat-card">
+    <view class="cloud-user-avatar cloud-user-avatar-text">群</view>
+    <view class="cloud-user-info">
+      <view class="cloud-user-name">{{groupTitle}}</view>
+      <view class="cloud-user-detail">{{groupRoute}}</view>
+    </view>
+    <view class="cloud-user-actions">
+      <view class="online-badge">云端群聊</view>
+      <view wx:if="{{contactPhone}}" class="chat-call-button" catchtap="callContact">联系发起人</view>
+      <view wx:else class="chat-call-button chat-call-disabled">未留电话</view>
+    </view>
+  </view>
+
+  <view wx:if="{{!groupMode}}" class="note-box">
+    <input
+      class="note-input"
+      placeholder="给这位搭子添加备注"
+      value="{{noteInput}}"
+      bindinput="onNoteInput"
+      maxlength="30"
+    />
+    <view class="note-save" bindtap="saveNote">保存备注</view>
+  </view>
+
+  <view class="sync-tip" bindtap="refreshMessages">{{syncHint}} · 点此刷新</view>
+
+  <scroll-view class="message-list" scroll-y="true" scroll-into-view="{{scrollTarget}}" scroll-with-animation="true" bindscroll="onMessageScroll" bindscrolltolower="onMessageBottom" lower-threshold="60">
+    <button wx:if="{{cloudMode && hasMoreMessages}}" class="older-button" loading="{{cloudLoading}}" bindtap="loadOlderMessages">加载更早消息</button>
+    <view wx:for="{{messages}}" wx:key="id" id="{{item.id}}" class="message-line message-{{item.type}}">
+      <view wx:if="{{item.type === 'system'}}" class="system-message">{{item.text}}</view>
+      <block wx:else>
+        <image wx:if="{{item.type === 'other' && item.senderAvatar}}" class="chat-avatar" src="{{item.senderAvatar}}" mode="aspectFill"></image>
+        <view wx:elif="{{item.type === 'other'}}" class="chat-avatar">{{item.senderInitial}}</view>
+        <view class="message-bubble">
+          <view wx:if="{{groupMode && item.type === 'other'}}" class="message-sender">{{item.senderName}}</view>
+          <view class="message-text">{{item.text}}</view>
+          <view class="message-time">{{item.time}}</view>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{newMessageCount}}" class="new-message-chip" bindtap="scrollToLatest">{{newMessageCount}} 条新消息 ↓</view>
+
+  <view class="message-composer">
+    <input
+      class="composer-input"
+      placeholder="{{groupMode ? '发送群消息…' : '输入消息…'}}"
+      value="{{messageInput}}"
+      bindinput="onMessageInput"
+      confirm-type="send"
+      bindconfirm="sendMessage"
+    />
+    <button class="send-button" size="mini" loading="{{cloudLoading}}" bindtap="sendMessage">发送</button>
+  </view>
+</view>
+

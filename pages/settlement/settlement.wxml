@@ -1,0 +1,136 @@
+<view class="page settlement-page">
+  <view wx:if="{{loading}}" class="loading-state">正在读取结算信息…</view>
+  <view wx:elif="{{errorMessage}}" class="error-card card">{{errorMessage}}</view>
+
+  <block wx:else>
+    <view class="settlement-hero">
+      <view class="settlement-eyebrow">FARE SETTLEMENT</view>
+      <view class="settlement-heading">{{mode === 'create' ? '结束行程并结算' : mode === 'edit' ? '修改结算' : '行程结算'}}</view>
+      <view class="settlement-subheading">{{ride.from}} → {{ride.to}} · {{ride.date}} {{ride.time}}</view>
+    </view>
+
+    <block wx:if="{{mode === 'create' || mode === 'edit'}}">
+      <view class="form-card card">
+        <view class="field-label">最终车费（元）</view>
+        <view class="amount-input-wrap">
+          <text>¥</text>
+          <input class="amount-input" type="digit" placeholder="例如 86.50" value="{{amount}}" bindinput="onAmountInput" maxlength="8" />
+        </view>
+        <view class="field-help">请填写滴滴/高德订单上的最终实付金额。小程序无法自动读取平台订单。</view>
+      </view>
+
+      <view class="member-select-card card">
+        <view class="select-head">
+          <view class="field-label">实际乘车人</view>
+          <view class="select-count">已选 {{selectedCount}} 人</view>
+        </view>
+        <view class="field-help">未上车的人可以取消勾选；发布人如果也乘车，请保留自己。</view>
+        <view
+          wx:for="{{members}}"
+          wx:key="membershipId"
+          class="select-member {{item.selected ? 'select-member-active' : ''}}"
+          data-user-id="{{item.user.userId}}"
+          bindtap="toggleMember"
+        >
+          <view class="select-check">{{item.selected ? '✓' : ''}}</view>
+          <view class="select-member-info">
+            <view class="select-member-name">{{item.user.name}}<text wx:if="{{item.isSelf}}" class="select-self">我</text></view>
+            <view class="select-member-role">{{item.role === 'owner' ? '发布人 / 收款人' : '同行人'}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="estimate-card card">
+        <view>
+          <view class="estimate-label">按 {{selectedCount}} 人平分</view>
+          <view class="estimate-note">最终每人金额以生成结算单为准，尾差会自动分配。</view>
+        </view>
+        <view class="estimate-value">¥{{estimateLabel}}<text>/人</text></view>
+      </view>
+
+      <button class="primary-button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitSettlement">{{mode === 'edit' ? '保存修改' : '生成结算单'}}</button>
+      <button wx:if="{{mode === 'edit'}}" class="cancel-edit-button" bindtap="cancelEdit">取消修改</button>
+    </block>
+
+    <block wx:else>
+      <view wx:if="{{settlement}}" class="settlement-content">
+        <view class="summary-card card">
+          <view class="summary-row">
+            <view class="summary-label">总车费</view>
+            <view class="summary-value">¥{{settlement.totalLabel}}</view>
+          </view>
+          <view class="summary-row">
+            <view class="summary-label">乘车人数</view>
+            <view class="summary-value">{{settlement.riderCount}} 人</view>
+          </view>
+          <view class="summary-row">
+            <view class="summary-label">人均约</view>
+            <view class="summary-value summary-accent">¥{{settlement.perPersonLabel}}</view>
+          </view>
+        </view>
+
+        <view wx:if="{{isOwner && settlement.confirmedCount === 0}}" class="settlement-admin-actions">
+          <button class="admin-button" disabled="{{settlement.claimedCount > 0}}" bindtap="startEditSettlement">修改结算</button>
+          <button class="admin-button admin-button-danger" bindtap="withdrawSettlement">撤销结算</button>
+        </view>
+        <view wx:if="{{isOwner && settlement.claimedCount > 0 && settlement.confirmedCount === 0}}" class="admin-hint">已有同行人标记“我已转账”，撤销结算后才能修改金额或乘车人。</view>
+        <button wx:if="{{isOwner}}" class="reminder-button" bindtap="copyReminder">复制催付文案</button>
+
+        <view wx:if="{{!isOwner}}" class="pay-card card">
+          <view class="pay-label">你需要支付</view>
+          <view class="pay-amount">¥{{settlement.myShareLabel}}</view>
+          <view class="pay-caption">收款人：{{settlement.payeeName}}</view>
+
+          <view wx:if="{{settlement.paymentCodeUrl}}" class="pay-qr-wrap" bindtap="previewPaymentCode">
+            <image class="pay-qr" src="{{settlement.paymentCodeUrl}}" mode="widthFix" show-menu-by-longpress></image>
+            <view class="pay-qr-tip">微信收款码建议用另一台手机扫一扫；同一台手机可点开大图保存后尝试识别。小程序内不支持长按直接转账；支付宝收款码请保存后用支付宝扫。</view>
+          </view>
+          <view wx:else class="pay-qr-empty">发布人还没有上传收款码，请让发布人先到“我的”页面上传，或在微信群发起群收款。</view>
+
+          <view class="pay-status pay-status-{{settlement.myStatus}}">{{settlement.myStatus === 'pending' ? '待转账' : settlement.myStatus === 'claimed' ? '已标记转账，等待发布人确认' : settlement.myStatus === 'confirmed' ? '发布人已确认收款' : '自己承担'}}</view>
+          <button wx:if="{{settlement.myStatus === 'pending'}}" class="pay-button" loading="{{actionLoading}}" bindtap="markPaid">我已转账</button>
+          <button wx:elif="{{settlement.myStatus === 'claimed'}}" class="pay-button pay-button-muted" disabled>等待发布人确认</button>
+          <button class="copy-amount-button" bindtap="copyMyShare">复制金额</button>
+          <view class="pay-warning">请通过微信转账给发布人，转账前核对收款人姓名和头像，不要向陌生人付款。小程序不代收代付，转账纠纷由双方自行处理。</view>
+        </view>
+
+        <block wx:if="{{isOwner}}">
+          <view class="owner-qr-card card">
+            <view class="field-label">你的收款码</view>
+            <view wx:if="{{settlement.paymentCodeUrl}}" class="owner-qr-wrap" bindtap="previewPaymentCode">
+              <image class="owner-qr" src="{{settlement.paymentCodeUrl}}" mode="widthFix" show-menu-by-longpress></image>
+              <view class="pay-qr-tip">微信收款码建议让同行人用另一台手机扫一扫；同一台手机可点开大图保存后尝试识别。小程序内不支持长按直接转账；支付宝收款码请让同行人保存后用支付宝扫。</view>
+            </view>
+            <view wx:else class="pay-qr-empty">你还没有上传收款码，请先到“我的”页面上传。</view>
+          </view>
+
+          <view class="participants-card card">
+            <view class="select-head">
+              <view class="field-label">收款进度</view>
+              <view class="select-count">已确认 {{settlement.confirmedCount}}/{{settlement.payerCount}}</view>
+            </view>
+            <view wx:for="{{settlement.participants}}" wx:key="userId" class="participant-row">
+              <view class="participant-main">
+                <view class="participant-name">{{item.name}}<text wx:if="{{item.isSelf}}" class="select-self">我</text></view>
+                <view class="participant-status participant-status-{{item.status}}">{{item.statusText}}</view>
+              </view>
+              <view class="participant-share">¥{{item.shareLabel}}</view>
+              <button
+                wx:if="{{item.role !== 'owner' && item.status !== 'confirmed'}}"
+                class="confirm-button"
+                data-user-id="{{item.userId}}"
+                loading="{{actionLoading}}"
+                bindtap="confirmPayment"
+              >确认收款</button>
+            </view>
+          </view>
+
+          <button class="primary-button complete-button {{(!settlement.canComplete || actionLoading) ? 'complete-button-disabled' : ''}}" disabled="{{!settlement.canComplete || actionLoading}}" bindtap="completeSettlement">完成结算</button>
+          <view class="complete-tip">所有同行人确认收款后，才能完成结算并关闭拼车团。</view>
+        </block>
+      </view>
+
+      <view wx:else class="empty-card card">当前没有可查看的结算单。</view>
+    </block>
+  </block>
+</view>

@@ -1,0 +1,164 @@
+<view class="page profile-page">
+  <view class="profile-hero">
+    <view class="profile-eyebrow">MY CAMPUS PROFILE</view>
+    <view class="profile-title">我的校园名片</view>
+    <view class="profile-subtitle">让同行伙伴更容易认识你</view>
+  </view>
+
+  <view class="avatar-card card">
+    <view class="avatar-wrap" bindtap="chooseAvatar">
+      <image wx:if="{{profile.avatar}}" class="avatar-image" src="{{profile.avatar}}" mode="aspectFill"></image>
+      <view wx:else class="avatar-fallback">{{avatarText}}</view>
+      <view class="avatar-camera">＋</view>
+    </view>
+    <view class="avatar-info">
+      <view class="avatar-title">{{profile.name || '添加姓名或昵称'}}</view>
+      <view class="avatar-tip">点击选择 JPG、PNG 或 WebP 图片，选择后再保存</view>
+    </view>
+    <view class="save-state {{saved ? 'state-saved' : ''}}">{{saved ? '已保存' : '未保存'}}</view>
+  </view>
+
+  <view class="cloud-status cloud-status-{{cloudStatusType}}">
+    <view class="cloud-status-dot"></view>
+    <view>{{cloudStatusText}}</view>
+  </view>
+
+  <view class="payment-code-card card">
+    <view class="payment-code-head">
+      <view>
+        <view class="field-label">收款码</view>
+        <view class="field-help">发布行程前必须上传；只对同一结算行程的成员可见。</view>
+      </view>
+      <view class="payment-code-status {{profile.paymentCode ? 'payment-code-ready' : ''}}">{{profile.paymentCode ? '已上传' : '未上传'}}</view>
+    </view>
+
+    <view wx:if="{{profile.paymentCodeUrl}}" class="payment-code-preview" bindtap="previewPaymentCode">
+      <image src="{{profile.paymentCodeUrl}}" mode="widthFix" show-menu-by-longpress></image>
+    </view>
+    <view wx:else class="payment-code-empty">上传微信/支付宝收款码，用于行程结束后收取同行人平摊的车费。</view>
+
+    <view class="payment-code-actions">
+      <button class="payment-code-upload" loading="{{paymentCodeUploading}}" disabled="{{paymentCodeUploading}}" bindtap="choosePaymentCode">
+        <view class="button-label">{{profile.paymentCode ? '更换收款码' : '上传收款码'}}</view>
+      </button>
+      <button wx:if="{{profile.paymentCode}}" class="payment-code-delete" bindtap="removePaymentCode">
+        <view class="button-label">删除</view>
+      </button>
+    </view>
+    <view class="payment-code-warning">请只截取收款码，不要上传付款码；付款码泄露可能被盗刷。小程序不代收代付，转账请在微信中完成。</view>
+  </view>
+
+  <view wx:if="{{friendCode}}" class="friend-code-card card" bindtap="copyFriendCode">
+    <view>
+      <view class="friend-code-label">我的搭子码</view>
+      <view class="friend-code-value">{{friendCode}}</view>
+    </view>
+    <view class="friend-code-copy">复制</view>
+  </view>
+
+  <view class="school-scope-card card">
+    <view>
+      <view class="school-scope-label">当前学校</view>
+      <view class="school-scope-name">{{selectedSchool ? selectedSchool.name : '尚未选择学校'}}</view>
+      <view wx:if="{{selectedSchool}}" class="school-scope-meta">{{selectedSchool.province}} · {{selectedSchool.city}}</view>
+    </view>
+    <button class="school-change-button" size="mini" bindtap="changeSchool">切换</button>
+  </view>
+
+  <view class="profile-form card">
+    <view class="form-section">
+      <view class="field-label">学号（选填，仅自己可见）</view>
+      <input
+        class="field-input student-id-input"
+        placeholder="支持 4-20 位字母、数字、_ 或 -"
+        value="{{profile.studentId}}"
+        data-field="studentId"
+        bindinput="onInput"
+        maxlength="20"
+      />
+    </view>
+
+    <view class="form-section">
+      <view class="field-label">姓名或昵称 <text>*</text></view>
+      <input
+        class="field-input"
+        placeholder="例如：陈同学"
+        value="{{profile.name}}"
+        data-field="name"
+        bindinput="onInput"
+        maxlength="16"
+      />
+    </view>
+
+    <view class="form-section">
+      <view class="field-label">手机号 <text>*</text></view>
+      <input
+        class="field-input phone-input"
+        type="number"
+        placeholder="请输入 11 位手机号"
+        value="{{profile.phone}}"
+        data-field="phone"
+        bindinput="onInput"
+        maxlength="11"
+      />
+      <view class="field-help">仅用于已建立联系后的快速拨号；普通资料、申请和成员列表不会公开号码。</view>
+    </view>
+
+    <view class="form-section">
+      <view class="field-label">性别</view>
+      <view class="gender-options">
+        <view
+          wx:for="{{genders}}"
+          wx:key="*this"
+          class="gender-option {{profile.gender === item ? 'gender-selected' : ''}}"
+          data-value="{{item}}"
+          bindtap="selectGender"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <view class="form-section two-columns">
+      <view class="column-field">
+        <view class="field-label">年级</view>
+        <picker mode="selector" range="{{grades}}" value="{{gradeIndex}}" bindchange="onGradeChange">
+          <view class="picker-field">{{profile.grade}} <text>⌄</text></view>
+        </picker>
+      </view>
+      <view class="column-field">
+        <view class="field-label">专业</view>
+        <input
+          class="field-input"
+          placeholder="例如：计算机科学"
+          value="{{profile.major}}"
+          data-field="major"
+          bindinput="onInput"
+          maxlength="30"
+        />
+      </view>
+    </view>
+
+    <view class="form-section">
+      <view class="field-label">个人简介</view>
+      <textarea
+        class="bio-input"
+        placeholder="简单介绍自己，例如常用出行路线、拼车习惯等。手机号请填写在上方专用字段。"
+        value="{{profile.bio}}"
+        data-field="bio"
+        bindinput="onInput"
+        maxlength="120"
+      ></textarea>
+      <view class="bio-count">{{profile.bio.length}}/120</view>
+    </view>
+  </view>
+
+  <view class="profile-save-panel card">
+    <view class="profile-save-copy">
+      <view class="profile-save-title">{{syncing ? '正在同步资料' : saved ? '资料已保存' : '修改后请保存'}}</view>
+      <view class="profile-save-desc">保存后会同步到云端；学号和手机号不会出现在公开资料中。</view>
+    </view>
+    <button class="primary-button profile-save-button" loading="{{syncing}}" disabled="{{syncing}}" bindtap="saveProfile">
+      <view class="button-label">{{syncing ? '正在同步…' : '保存个人资料'}}</view>
+    </button>
+  </view>
+</view>
+

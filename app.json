@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/school-select/school-select",
+    "pages/index/index",
+    "pages/rides/rides",
+    "pages/publish/publish",
+    "pages/messages/messages",
+    "pages/profile/profile",
+    "pages/chat/chat",
+    "pages/group/group",
+    "pages/settlement/settlement",
+    "pages/ride-edit/ride-edit"
+  ],
+  "window": {
+    "navigationBarTitleText": "校园拼车",
+    "navigationBarBackgroundColor": "#0b5c4d",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f4f7f5",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#71807b",
+    "selectedColor": "#0b5c4d",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/rides/rides",
+        "text": "找拼车"
+      },
+      {
+        "pagePath": "pages/publish/publish",
+        "text": "发布"
+      },
+      {
+        "pagePath": "pages/messages/messages",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "style": "v2"
+}
+

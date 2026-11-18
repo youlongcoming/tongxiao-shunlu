@@ -1,0 +1,141 @@
+<view class="page group-page">
+  <view wx:if="{{ride}}" class="ride-card">
+    <view class="ride-top">
+      <view class="ride-tags">
+        <view class="direction-tag">{{ride.direction}}</view>
+        <view wx:if="{{ride.status === 'active'}}" class="ride-status status-{{ride.statusTone}}">{{ride.seatsLabel}}</view>
+      </view>
+      <view class="ride-time">{{ride.date}} · {{ride.time}}</view>
+    </view>
+    <view class="route-row">
+      <text>{{ride.from}}</text>
+      <text class="route-arrow">→</text>
+      <text>{{ride.to}}</text>
+    </view>
+    <view class="ride-meta">发起人：{{ride.owner}} · {{ride.memberCount}} 人已加入</view>
+    <view class="ride-note">{{ride.note}}</view>
+    <view wx:if="{{ride.status !== 'active'}}" class="status-banner">{{ride.statusLabel}}</view>
+  </view>
+
+  <view wx:if="{{joined}}" class="external-trip-card card">
+    <view class="external-trip-head">
+      <view class="external-trip-title-wrap">
+        <view class="external-trip-title">网约车行程</view>
+        <view class="external-trip-subtitle">发布人在滴滴/高德下单后同步给同行人</view>
+      </view>
+      <view wx:if="{{externalTrip}}" class="external-trip-provider">{{externalTrip.providerLabel}}</view>
+    </view>
+
+    <block wx:if="{{externalTrip}}">
+      <view class="external-trip-host">{{externalTrip.host}}</view>
+      <view class="external-trip-note">链接由发布人提供，非平台实时同步，可能失效；司机联系、支付、开票和售后以滴滴/高德为准。</view>
+      <view wx:if="{{!externalTripEditing}}" class="external-trip-actions">
+        <button class="external-trip-primary" bindtap="copyExternalTrip">复制链接</button>
+        <button wx:if="{{isOwner && ride.status === 'active'}}" class="external-trip-secondary" bindtap="startExternalTripEdit">更新</button>
+        <button wx:if="{{isOwner && ride.status === 'active'}}" class="external-trip-danger" bindtap="removeExternalTrip">删除</button>
+      </view>
+    </block>
+
+    <block wx:elif="{{isOwner && ride.status === 'active'}}">
+      <view class="external-trip-empty">在滴滴/高德完成下单后，复制“分享行程”链接，粘贴到这里，同行人就能查看。</view>
+      <view wx:if="{{!externalTripEditing}}" class="external-trip-actions">
+        <button class="external-trip-primary" bindtap="startExternalTripEdit">粘贴行程链接</button>
+        <button class="external-trip-secondary" bindtap="externalTripHelp">如何获取</button>
+      </view>
+    </block>
+
+    <view wx:else class="external-trip-empty">发布人还没有同步网约车行程链接。</view>
+
+    <view wx:if="{{externalTripEditing}}" class="external-trip-editor">
+      <textarea
+        class="external-trip-input"
+        value="{{externalTripDraft}}"
+        maxlength="2048"
+        auto-height
+        placeholder="粘贴滴滴/高德行程分享链接（https://）"
+        bindinput="onExternalTripInput"
+      ></textarea>
+      <view class="external-trip-editor-actions">
+        <button class="external-trip-secondary" bindtap="pasteExternalTrip">读取剪贴板</button>
+        <button class="external-trip-primary" loading="{{externalTripLoading}}" bindtap="saveExternalTrip">保存</button>
+        <button class="external-trip-secondary" bindtap="cancelExternalTripEdit">取消</button>
+      </view>
+      <view class="external-trip-hint">只支持滴滴、高德官方分享链接；链接只对已加入的同行人可见。</view>
+    </view>
+  </view>
+
+  <view wx:if="{{settlement}}" class="settlement-card card">
+    <view class="settlement-head">
+      <view class="settlement-title">行程结算</view>
+      <view class="settlement-status">{{settlement.canComplete ? '待完成' : '待收款'}}</view>
+    </view>
+    <view class="settlement-summary">总车费 ¥{{settlement.totalLabel}} · {{settlement.riderCount}} 人 · 人均约 ¥{{settlement.perPersonLabel}}</view>
+    <view class="settlement-progress">已确认 {{settlement.confirmedCount}}/{{settlement.payerCount}} 位同行人</view>
+    <button class="settlement-button" bindtap="openSettlement">查看结算</button>
+  </view>
+
+  <view wx:if="{{errorMessage}}" class="error-card card">{{errorMessage}}</view>
+
+  <view wx:if="{{ride && !joined && ride.status === 'active' && ride.canJoin}}" class="join-card card">
+    <view class="join-title">加入后进入临时拼车群</view>
+    <view class="join-caption">可参与群聊，并自主选择成员发送搭子申请；对方同意后才会成为搭子</view>
+    <button class="join-button" loading="{{loading}}" bindtap="joinGroup">加入拼车团</button>
+  </view>
+
+  <view wx:if="{{ride && !joined && ride.status === 'active' && !ride.canJoin}}" class="join-card card">
+    <view class="join-title">无法加入</view>
+    <view class="join-caption">{{ride.started ? '行程已发车，可以继续查看行程信息。' : '该行程已没有空余座位。'}}</view>
+  </view>
+
+  <block wx:if="{{joined}}">
+    <view class="group-actions card">
+      <view class="action-grid {{isOwner && ride.status === 'active' ? 'owner-actions' : ''}}">
+        <button class="chat-button" bindtap="openGroupChat">进入拼车群聊</button>
+        <block wx:if="{{isOwner && ride.status === 'active'}}">
+          <button wx:if="{{!ride.started}}" class="secondary-button" bindtap="editRide">编辑行程</button>
+          <button class="secondary-button" data-action="end" bindtap="confirmRideAction">结束并结算</button>
+          <button class="danger-button" data-action="cancel" bindtap="confirmRideAction">取消行程</button>
+        </block>
+      </view>
+      <button wx:if="{{!isOwner && ride.status === 'active' && !ride.started}}" class="danger-link" bindtap="leaveGroup">退出拼车团</button>
+      <view wx:if="{{!isOwner && ride.status === 'active' && ride.started}}" class="leave-locked">行程已发车，不能退出拼车团</view>
+    </view>
+    <view class="section-heading">
+      <view class="section-title">拼车团成员</view>
+      <view class="member-count">{{members.length}}</view>
+    </view>
+    <view wx:for="{{members}}" wx:key="membershipId" class="member-card card">
+      <image wx:if="{{item.user.avatar}}" class="member-avatar" src="{{item.user.avatar}}" mode="aspectFill"></image>
+      <view wx:else class="member-avatar member-avatar-text">{{item.user.initial}}</view>
+      <view class="member-info">
+        <view class="member-name">
+          {{item.user.name}}
+          <text wx:if="{{item.role === 'owner'}}" class="owner-badge">发起人</text>
+          <text wx:if="{{item.isSelf}}" class="self-badge">我</text>
+        </view>
+        <view class="member-detail">{{item.user.detail}}</view>
+        <view wx:if="{{item.user.bio}}" class="member-bio">{{item.user.bio}}</view>
+      </view>
+      <view wx:if="{{!item.isSelf}}" class="member-actions">
+        <button
+          class="buddy-button {{item.requestSent ? 'buddy-sent' : ''}}"
+          size="mini"
+          disabled="{{item.requestSent}}"
+          data-user-id="{{item.user.userId}}"
+          bindtap="addBuddy"
+        >{{item.requestSent ? '已申请' : '申请搭子'}}</button>
+        <button
+          wx:if="{{isOwner && ride.status === 'active'}}"
+          class="remove-button"
+          size="mini"
+          data-user-id="{{item.user.userId}}"
+          data-name="{{item.user.name}}"
+          bindtap="removeMember"
+        >移除</button>
+      </view>
+    </view>
+  </block>
+
+  <view wx:if="{{loading && !ride}}" class="loading-state">正在加载拼车团…</view>
+  <view class="safety-tip">搭子码和群成员列表都只能发起申请，对方同意后才会成为搭子。行程结束后临时群会自动删除；请勿在群聊公开手机号、住址等敏感信息。</view>
+</view>

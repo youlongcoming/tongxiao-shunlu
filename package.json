@@ -1,0 +1,21 @@
+{
+  "name": "tongxiao-shunlu",
+  "version": "0.1.0",
+  "private": true,
+  "description": "School-scoped campus carpool WeChat Mini Program with WeChat Cloud Development",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/youlongcoming/tongxiao-shunlu.git"
+  },
+  "bugs": {
+    "url": "https://github.com/youlongcoming/tongxiao-shunlu/issues"
+  },
+  "homepage": "https://github.com/youlongcoming/tongxiao-shunlu#readme",
+  "scripts": {
+    "test": "node tests/run.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

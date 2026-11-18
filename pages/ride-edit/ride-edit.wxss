@@ -1,0 +1,151 @@
+.edit-page {
+  padding: 24rpx;
+}
+
+.edit-card {
+  padding: 28rpx;
+  border: 2rpx solid #dfe9e5;
+  border-radius: 24rpx;
+  background: #ffffff;
+}
+
+.field-label {
+  color: #18332e;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.field-gap {
+  margin-top: 28rpx;
+}
+
+.field-gap-small {
+  margin-top: 12rpx;
+}
+
+.option-row,
+.field-grid,
+.stepper {
+  display: flex;
+  gap: 12rpx;
+}
+
+.option {
+  flex: 1;
+  margin-top: 12rpx;
+  padding: 18rpx 12rpx;
+  border: 2rpx solid #dfe9e5;
+  border-radius: 14rpx;
+  color: #71807b;
+  text-align: center;
+}
+
+.selected {
+  border-color: #0d7a67;
+  background: #eaf7f3;
+  color: #075e54;
+  font-weight: 700;
+}
+
+.field-input,
+.picker-value,
+.note-input,
+.stepper {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 12rpx;
+  padding: 20rpx;
+  border: 2rpx solid #dfe9e5;
+  border-radius: 14rpx;
+  background: #f8faf9;
+  color: #18332e;
+}
+
+.field-half {
+  flex: 1;
+  min-width: 0;
+}
+
+.fare-mode {
+  box-sizing: border-box;
+  margin-top: 12rpx;
+  padding: 20rpx;
+  border: 2rpx solid #f1ddcc;
+  border-radius: 14rpx;
+  color: #a85f37;
+  background: #fff7f0;
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.route-auto-note {
+  margin-top: 12rpx;
+  padding: 12rpx 16rpx;
+  border-radius: 12rpx;
+  color: #0b6b58;
+  background: #eaf7f3;
+  font-size: 20rpx;
+  line-height: 1.5;
+}
+
+.field-input-locked {
+  color: #31554c;
+  background: #eef6f2;
+}
+
+.owner-readonly {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 84rpx;
+  margin-top: 12rpx;
+  padding: 0 20rpx;
+  border: 2rpx solid #dfe9e5;
+  border-radius: 14rpx;
+  background: #f8faf9;
+}
+
+.owner-name {
+  color: #18332e;
+  font-size: 27rpx;
+  font-weight: 600;
+}
+
+.owner-edit {
+  color: #0b6b58;
+  font-size: 22rpx;
+}
+
+.field-help {
+  margin-top: 10rpx;
+  color: #7c8d87;
+  font-size: 21rpx;
+  line-height: 1.5;
+}
+
+.stepper {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.step-button {
+  color: #075e54;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.note-input {
+  min-height: 180rpx;
+}
+
+.save-button {
+  margin-top: 32rpx;
+  background: #075e54;
+  color: #ffffff;
+}
+
+.loading-state {
+  padding: 80rpx 0;
+  color: #71807b;
+  text-align: center;
+}

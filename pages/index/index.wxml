@@ -1,0 +1,56 @@
+<view class="page home-page">
+  <view class="hero">
+    <view class="hero-badge" bindtap="changeSchool">{{schoolName}} · 切换学校</view>
+    <view class="hero-title">顺路同行，<text>让每次出发更轻松</text></view>
+    <view class="hero-desc">只展示 {{schoolName}} 范围内的校园拼车信息</view>
+    <view class="hero-actions">
+      <button class="hero-primary" bindtap="goToRides">立即找拼车</button>
+      <button class="hero-secondary" bindtap="goToPublish">发布行程</button>
+    </view>
+    <view class="route-art" aria-hidden="true">
+      <view class="route-dot route-dot-start"></view>
+      <view class="route-line"></view>
+      <view class="route-car">车</view>
+      <view class="route-dot route-dot-end"></view>
+    </view>
+  </view>
+
+  <view class="cloud-status">{{cloudMessage}}</view>
+
+  <view class="available-card card" bindtap="goToRides">
+    <view class="available-seal">{{availableCountText}}</view>
+    <view class="available-copy">
+      <view class="available-label">可选行程</view>
+      <view class="available-hint"><view class="available-dot"></view>未发车</view>
+    </view>
+    <view class="available-arrow">→</view>
+  </view>
+
+  <view class="section-heading">
+    <view class="section-title section-title-inline">近期行程</view>
+    <view class="section-link" bindtap="goToRides">查看全部 →</view>
+  </view>
+
+  <view wx:for="{{featuredRides}}" wx:key="id" class="ride-card card">
+    <view class="ride-topline">
+      <view class="ride-type">发布</view>
+      <view class="ride-date">{{item.date}} · {{item.time}}</view>
+    </view>
+    <view class="ride-route">
+      <view class="place">{{item.from}}</view>
+      <view class="arrow">→</view>
+      <view class="place place-end">{{item.to}}</view>
+    </view>
+    <view class="ride-meta">
+      <text>{{item.owner}}</text>
+      <text class="seat-tag">{{item.seatsLabel}}</text>
+      <button class="home-join" size="mini" data-id="{{item.id}}" loading="{{joiningRideId === item.id}}" bindtap="handleRideAction">{{item.actionText}}</button>
+    </view>
+  </view>
+
+  <view wx:if="{{!featuredRides.length}}" class="home-empty card" bindtap="goToRides">
+    <view class="home-empty-title">当前学校暂无近期行程</view>
+    <view class="home-empty-text">点击查看全部行程，或发布一条新的 →</view>
+  </view>
+</view>
+

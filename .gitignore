@@ -1,0 +1,28 @@
+# WeChat DevTools local settings
+project.private.config.json
+
+# Local agent / deck workspace (contains unredacted screenshots and drafts)
+.dsh/
+.dsh-office-*/
+*.pptx
+build_school_deck.py
+
+# Raw brand explorations; the canonical logo lives in assets/brand/
+assets/logo-concepts/
+assets/tongxiao-shunlu-logo*.png
+
+# Dependencies and generated packages
+node_modules/
+miniprogram_npm/
+cloudfunctions/**/node_modules/
+
+# Editor and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs and local environment
+*.log
+.env
+.env.*

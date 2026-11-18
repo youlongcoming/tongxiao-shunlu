@@ -1,0 +1,90 @@
+<view class="school-page">
+  <view class="school-header">
+    <view class="header-kicker">CAMPUS SCOPE</view>
+    <view class="header-title">{{changeMode ? '切换你的学校' : '先选择你的学校'}}</view>
+    <view class="header-desc">锁定校园后，只浏览和发布该学校范围内的拼车行程</view>
+  </view>
+
+  <view wx:if="{{changeMode && currentSchool}}" class="change-policy-card {{canChangeSchool ? '' : 'change-policy-locked'}}">
+    <view class="change-policy-label">当前学校</view>
+    <view class="change-policy-school">{{currentSchool.name}}</view>
+    <view class="change-policy-text">{{changePolicyText}}</view>
+  </view>
+
+  <view class="search-card">
+    <view class="search-row">
+      <view class="search-mark">查</view>
+      <input
+        class="search-input"
+        placeholder="搜索学校名称、城市或学校标识码"
+        value="{{searchQuery}}"
+        bindinput="onSearchInput"
+        maxlength="40"
+        focus="{{changeMode}}"
+      />
+      <view wx:if="{{searchQuery}}" class="clear-search" bindtap="clearSearch">清除</view>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state-card">正在读取你的学校范围…</view>
+  <view wx:if="{{errorMessage}}" class="error-card">{{errorMessage}}</view>
+
+  <view wx:if="{{searchQuery}}" class="search-results">
+    <view class="result-heading">搜索结果 · 最多显示 50 所</view>
+    <view
+      wx:for="{{searchResults}}"
+      wx:key="id"
+      class="school-result"
+      data-id="{{item.id}}"
+      bindtap="chooseSearchResult"
+    >
+      <view>
+        <view class="result-name">{{item.name}}</view>
+        <view class="result-meta">{{item.province}} · {{item.city}} · {{item.level}}</view>
+      </view>
+      <view class="result-action">选择</view>
+    </view>
+    <view wx:if="{{!searchResults.length}}" class="state-card">没有找到匹配学校，请尝试更短的关键词</view>
+  </view>
+
+  <block wx:else>
+    <view class="picker-card">
+      <view class="picker-heading">
+        <view class="picker-title">滚轮选择</view>
+        <view class="picker-caption">省份 / 城市 / 学校</view>
+      </view>
+      <view class="picker-labels">
+        <view>省份</view>
+        <view>城市</view>
+        <view>学校</view>
+      </view>
+      <picker-view
+        class="school-picker"
+        value="{{pickerValue}}"
+        indicator-style="height: 88rpx;"
+        bindchange="onPickerChange"
+      >
+        <picker-view-column>
+          <view wx:for="{{provinceNames}}" wx:key="*this" class="picker-item">{{item}}</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view wx:for="{{cityNames}}" wx:key="*this" class="picker-item">{{item}}</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view wx:for="{{schoolNames}}" wx:key="*this" class="picker-item school-picker-item">{{item}}</view>
+        </picker-view-column>
+      </picker-view>
+    </view>
+
+    <view wx:if="{{selectedSchool}}" class="selection-card">
+      <view class="selection-label">当前选择</view>
+      <view class="selection-name">{{selectedSchool.name}}</view>
+      <view class="selection-meta">{{selectedSchool.province}} · {{selectedSchool.city}} · {{selectedSchool.level}}</view>
+      <button class="confirm-button" loading="{{submitting}}" disabled="{{submitting || loading || (changeMode && !canChangeSchool)}}" bindtap="confirmPickerSchool">
+        {{submitting ? '正在保存…' : (changeMode && !canChangeSchool ? '本月不可更换' : (changeMode ? '确认更换学校' : '确认并进入校园拼车'))}}
+      </button>
+    </view>
+  </block>
+
+  <view class="source-note">已收录教育部 2026 年普通高等学校名单 {{schoolCount}} 所，不含成人高校及港澳台高校。</view>
+</view>

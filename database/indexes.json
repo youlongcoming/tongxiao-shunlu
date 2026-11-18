@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "collections": [
+    {
+      "name": "users",
+      "indexes": [
+        { "name": "openid_unique", "key": { "openid": 1 }, "unique": true },
+        { "name": "friend_code_unique", "key": { "friendCode": 1 }, "unique": true, "sparse": true }
+      ]
+    },
+    {
+      "name": "rides",
+      "indexes": [
+        { "name": "active_departure", "key": { "status": 1, "date": 1, "time": 1 } },
+        { "name": "school_active_departure", "key": { "schoolId": 1, "status": 1, "date": 1, "time": 1 } },
+        { "name": "owner_updated", "key": { "ownerOpenid": 1, "updatedAt": -1 } }
+      ]
+    },
+    {
+      "name": "ride_members",
+      "indexes": [
+        { "name": "ride_user_unique", "key": { "rideId": 1, "userOpenid": 1 }, "unique": true },
+        { "name": "user_joined", "key": { "userOpenid": 1, "joinedAt": -1 } },
+        { "name": "user_school_joined", "key": { "userOpenid": 1, "schoolId": 1, "joinedAt": -1 } }
+      ]
+    },
+    {
+      "name": "buddy_requests",
+      "indexes": [
+        { "name": "incoming_requests", "key": { "toOpenid": 1, "createdAt": -1 } },
+        { "name": "outgoing_requests", "key": { "fromOpenid": 1, "createdAt": -1 } },
+        { "name": "request_pair_status", "key": { "fromOpenid": 1, "toOpenid": 1, "status": 1 } },
+        { "name": "ride_group_requests", "key": { "rideId": 1, "createdAt": -1 }, "sparse": true }
+      ]
+    },
+    {
+      "name": "buddies",
+      "indexes": [
+        { "name": "buddy_pair_unique", "key": { "userOpenid": 1, "buddyOpenid": 1 }, "unique": true },
+        { "name": "buddy_list", "key": { "userOpenid": 1, "createdAt": -1 } }
+      ]
+    },
+    {
+      "name": "conversations",
+      "indexes": [
+        { "name": "member_updated", "key": { "memberOpenids": 1, "updatedAt": -1 } },
+        { "name": "direct_key_unique", "key": { "directKey": 1 }, "unique": true, "sparse": true },
+        { "name": "ride_group_unique", "key": { "rideId": 1 }, "unique": true, "sparse": true }
+      ]
+    },
+    {
+      "name": "messages",
+      "indexes": [
+        { "name": "conversation_created", "key": { "conversationId": 1, "createdAt": -1 } }
+      ]
+    },
+    {
+      "name": "chat_events",
+      "indexes": [
+        { "name": "owner_created", "key": { "ownerOpenid": 1, "createdAt": -1 } },
+        { "name": "owner_conversation_created", "key": { "ownerOpenid": 1, "conversationId": 1, "createdAt": -1 } }
+      ]
+    },
+    {
+      "name": "conversation_reads",
+      "indexes": [
+        { "name": "conversation_user_unique", "key": { "conversationId": 1, "userOpenid": 1 }, "unique": true },
+        { "name": "user_last_read", "key": { "userOpenid": 1, "lastReadAt": -1 } }
+      ]
+    },
+    {
+      "name": "subscriptions",
+      "indexes": [
+        { "name": "user_template_unique", "key": { "userOpenid": 1, "templateId": 1 }, "unique": true }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,264 @@
+page {
+  background: #f4f7f5;
+  color: #17352f;
+}
+
+.school-page {
+  min-height: 100vh;
+  padding: 32rpx 28rpx 40rpx;
+  box-sizing: border-box;
+}
+
+.school-header {
+  padding: 28rpx 12rpx 32rpx;
+}
+
+.header-kicker {
+  color: #15947a;
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.header-title {
+  margin-top: 12rpx;
+  font-size: 48rpx;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.header-desc {
+  margin-top: 14rpx;
+  color: #597069;
+  font-size: 26rpx;
+  line-height: 1.7;
+}
+
+.search-card,
+.change-policy-card,
+.picker-card,
+.selection-card,
+.state-card,
+.error-card,
+.school-result {
+  background: #ffffff;
+  border: 1rpx solid #dce8e3;
+  border-radius: 24rpx;
+  box-sizing: border-box;
+}
+
+.change-policy-card {
+  margin-bottom: 20rpx;
+  padding: 24rpx 28rpx;
+  border-color: #b9ddd3;
+  background: #edf8f4;
+}
+
+.change-policy-locked {
+  border-color: #f0c7b8;
+  background: #fff5f0;
+}
+
+.change-policy-label {
+  color: #15947a;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.change-policy-locked .change-policy-label,
+.change-policy-locked .change-policy-text {
+  color: #a44d31;
+}
+
+.change-policy-school {
+  margin-top: 8rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.change-policy-text {
+  margin-top: 8rpx;
+  color: #597069;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.confirm-button[disabled] {
+  background: #b8c7c2;
+  color: #ffffff;
+}
+
+.search-card {
+  padding: 8rpx 20rpx;
+  box-shadow: 0 12rpx 36rpx rgba(23, 53, 47, 0.08);
+}
+
+.search-row {
+  display: flex;
+  align-items: center;
+  min-height: 80rpx;
+}
+
+.search-mark {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 16rpx;
+  background: #e4f4ef;
+  color: #0b6b57;
+  font-size: 22rpx;
+  font-weight: 700;
+  line-height: 48rpx;
+  text-align: center;
+}
+
+.search-input {
+  flex: 1;
+  height: 72rpx;
+  padding: 0 18rpx;
+  font-size: 28rpx;
+}
+
+.clear-search,
+.result-action {
+  color: #0b6b57;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.state-card,
+.error-card {
+  margin-top: 20rpx;
+  padding: 28rpx;
+  color: #60736d;
+  font-size: 26rpx;
+  text-align: center;
+}
+
+.error-card {
+  border-color: #f0c7b8;
+  background: #fff5f0;
+  color: #a44d31;
+}
+
+.picker-card {
+  margin-top: 24rpx;
+  overflow: hidden;
+}
+
+.picker-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 28rpx 28rpx 18rpx;
+}
+
+.picker-title {
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.picker-caption,
+.result-meta,
+.selection-meta {
+  color: #71807b;
+  font-size: 22rpx;
+}
+
+.picker-labels {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.45fr;
+  padding: 0 18rpx 12rpx;
+  color: #8b9994;
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.school-picker {
+  height: 420rpx;
+  border-top: 1rpx solid #edf2ef;
+  background: #fbfdfc;
+}
+
+.picker-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  padding: 0 8rpx;
+  box-sizing: border-box;
+  font-size: 26rpx;
+  text-align: center;
+}
+
+.school-picker-item {
+  font-size: 24rpx;
+  line-height: 1.35;
+}
+
+.selection-card {
+  margin-top: 20rpx;
+  padding: 28rpx;
+}
+
+.selection-label {
+  color: #15947a;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.selection-name {
+  margin-top: 8rpx;
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.selection-meta {
+  margin-top: 8rpx;
+}
+
+.confirm-button {
+  margin-top: 24rpx;
+  border: 0;
+  border-radius: 18rpx;
+  background: #0b6b57;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.confirm-button::after {
+  border: 0;
+}
+
+.search-results {
+  margin-top: 24rpx;
+}
+
+.result-heading {
+  padding: 0 8rpx 14rpx;
+  color: #71807b;
+  font-size: 22rpx;
+}
+
+.school-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+  padding: 22rpx 24rpx;
+}
+
+.result-name {
+  max-width: 540rpx;
+  margin-bottom: 8rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.source-note {
+  padding: 28rpx 18rpx 0;
+  color: #87958f;
+  font-size: 20rpx;
+  line-height: 1.6;
+  text-align: center;
+}

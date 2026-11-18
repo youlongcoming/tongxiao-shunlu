@@ -1,0 +1,42 @@
+{
+  "desc": "校园拼车页面索引配置",
+  "rules": [
+    {
+      "action": "disallow",
+      "page": "pages/school-select/school-select"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/chat/chat"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/group/group"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/messages/messages"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/profile/profile"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/publish/publish"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/ride-edit/ride-edit"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/settlement/settlement"
+    },
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}
+

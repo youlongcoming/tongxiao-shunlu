@@ -1,0 +1,284 @@
+.publish-page {
+  padding-top: 0;
+}
+
+.publish-intro {
+  margin: 0 -28rpx;
+  padding: 42rpx 36rpx 76rpx;
+  color: #ffffff;
+  background: linear-gradient(140deg, #084b3f, #0b6b58);
+}
+
+.intro-eyebrow {
+  font-size: 20rpx;
+  letter-spacing: 4rpx;
+  color: #9ce2c8;
+}
+
+.intro-title {
+  margin-top: 12rpx;
+  font-size: 42rpx;
+  font-weight: 700;
+}
+
+.intro-desc {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-card {
+  margin-top: -40rpx;
+  padding: 8rpx 28rpx;
+}
+
+.form-section {
+  position: relative;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid #edf2ef;
+}
+
+.form-section:last-child {
+  border-bottom: 0;
+}
+
+.field-label {
+  margin-bottom: 16rpx;
+  font-size: 25rpx;
+  font-weight: 650;
+  color: #344b45;
+}
+
+.option-row {
+  display: flex;
+  gap: 18rpx;
+}
+
+.option {
+  flex: 1;
+  padding: 20rpx;
+  border: 1rpx solid #dce7e2;
+  border-radius: 16rpx;
+  text-align: center;
+  color: #61736d;
+  background: #f8faf9;
+}
+
+.option-selected {
+  border-color: #0b6b58;
+  color: #0b5c4d;
+  background: #e5f5ef;
+  font-weight: 650;
+}
+
+.route-section {
+  position: relative;
+}
+
+.route-input-row {
+  display: flex;
+  align-items: center;
+}
+
+.route-marker {
+  z-index: 1;
+  flex: none;
+  width: 14rpx;
+  height: 14rpx;
+  margin: 0 24rpx 0 8rpx;
+  border: 5rpx solid #0b6b58;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.marker-end {
+  border-color: #e06f3d;
+}
+
+.route-connector {
+  width: 2rpx;
+  height: 24rpx;
+  margin-left: 19rpx;
+  background: #ccdcd4;
+}
+
+.text-input,
+.picker-value,
+.money-input,
+.stepper {
+  box-sizing: border-box;
+  min-height: 80rpx;
+  border: 1rpx solid #dce7e2;
+  border-radius: 14rpx;
+  background: #f8faf9;
+}
+
+.text-input {
+  flex: 1;
+  padding: 0 22rpx;
+}
+
+.standalone-input {
+  width: 100%;
+}
+
+.time-default-tip {
+  margin: 10rpx 4rpx 0;
+  color: #7c8d87;
+  font-size: 20rpx;
+  line-height: 1.5;
+}
+
+.route-auto-note {
+  margin-top: 14rpx;
+  padding: 12rpx 16rpx;
+  border-radius: 12rpx;
+  color: #0b6b58;
+  background: #eaf7f3;
+  font-size: 20rpx;
+  line-height: 1.5;
+}
+
+.owner-readonly {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 80rpx;
+  padding: 0 20rpx;
+  border: 1rpx solid #dce7e2;
+  border-radius: 14rpx;
+  background: #f8faf9;
+}
+
+.owner-name {
+  color: #18332d;
+  font-size: 27rpx;
+  font-weight: 600;
+}
+
+.owner-edit {
+  color: #0b6b58;
+  font-size: 22rpx;
+}
+
+.field-help {
+  margin-top: 10rpx;
+  color: #7c8d87;
+  font-size: 21rpx;
+  line-height: 1.5;
+}
+
+.text-input-locked {
+  color: #31554c;
+  background: #eef6f2;
+}
+
+.field-grid {
+  display: flex;
+  gap: 20rpx;
+}
+
+.grid-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.picker-value {
+  padding: 0 20rpx;
+  line-height: 80rpx;
+  color: #344b45;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8rpx;
+}
+
+.step-button {
+  width: 54rpx;
+  height: 54rpx;
+  border-radius: 12rpx;
+  line-height: 54rpx;
+  text-align: center;
+  color: #0b5c4d;
+  background: #e5f5ef;
+  font-size: 32rpx;
+}
+
+.step-value {
+  font-weight: 700;
+}
+
+.fare-mode {
+  box-sizing: border-box;
+  min-height: 80rpx;
+  padding: 0 20rpx;
+  border: 1rpx solid #f1ddcc;
+  border-radius: 14rpx;
+  color: #a85f37;
+  background: #fff7f0;
+  font-size: 22rpx;
+  line-height: 80rpx;
+}
+
+.money-input {
+  display: flex;
+  align-items: center;
+  padding: 0 20rpx;
+}
+
+.money-input text {
+  margin-right: 12rpx;
+  color: #e06f3d;
+  font-weight: 700;
+}
+
+.money-input input {
+  flex: 1;
+  min-width: 0;
+}
+
+.note-input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 180rpx;
+  padding: 20rpx;
+  border: 1rpx solid #dce7e2;
+  border-radius: 14rpx;
+  background: #f8faf9;
+  line-height: 1.5;
+}
+
+.character-count {
+  position: absolute;
+  right: 14rpx;
+  bottom: 38rpx;
+  color: #93a29d;
+  font-size: 21rpx;
+}
+
+.publish-actions {
+  margin-top: 24rpx;
+  padding: 22rpx;
+}
+
+.publish-actions-title {
+  color: #18332d;
+  font-size: 25rpx;
+  font-weight: 650;
+}
+
+.publish-actions-desc {
+  margin-top: 8rpx;
+  color: #7c8d87;
+  font-size: 21rpx;
+  line-height: 1.55;
+}
+
+.publish-submit-button {
+  width: 100%;
+  margin-top: 18rpx;
+}
+

@@ -1,0 +1,250 @@
+page {
+  height: 100%;
+  overflow: hidden;
+}
+
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100vh;
+  background: #f4f7f5;
+}
+
+.cloud-user-card {
+  display: flex;
+  align-items: center;
+  margin: 20rpx 24rpx 0;
+  padding: 22rpx 24rpx;
+  border-radius: 22rpx;
+  color: #ffffff;
+  background: linear-gradient(145deg, #084b3f, #0b6b58);
+}
+
+.cloud-user-avatar {
+  flex: none;
+  width: 82rpx;
+  height: 82rpx;
+  margin-right: 18rpx;
+  border-radius: 50%;
+  background: #e5f5ef;
+}
+
+.cloud-user-avatar-text {
+  color: #0b5c4d;
+  line-height: 82rpx;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.cloud-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cloud-user-name {
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.cloud-user-detail {
+  margin-top: 8rpx;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 21rpx;
+}
+
+.online-badge {
+  padding: 6rpx 12rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.35);
+  border-radius: 99rpx;
+  color: #b9f0dc;
+  font-size: 18rpx;
+}
+
+.cloud-user-actions {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10rpx;
+  margin-left: 14rpx;
+}
+
+.chat-call-button {
+  padding: 7rpx 16rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.45);
+  border-radius: 99rpx;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 19rpx;
+  font-weight: 650;
+}
+
+.chat-call-disabled {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  background: transparent;
+  font-weight: 400;
+}
+
+.note-box,
+.message-line,
+.message-composer {
+  display: flex;
+  align-items: center;
+}
+
+.note-box {
+  margin: 14rpx 24rpx 0;
+  padding: 10rpx 12rpx 10rpx 20rpx;
+  border: 1rpx solid #dce7e2;
+  border-radius: 16rpx;
+  background: #ffffff;
+}
+
+.note-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 23rpx;
+}
+
+.note-save {
+  padding: 12rpx 16rpx;
+  border-radius: 10rpx;
+  color: #0b5c4d;
+  background: #e5f5ef;
+  font-size: 21rpx;
+}
+
+.sync-tip {
+  margin: 14rpx 24rpx 0;
+  color: #0b6b58;
+  font-size: 20rpx;
+  text-align: center;
+}
+
+.message-list {
+  flex: 1;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 18rpx 24rpx;
+}
+
+.new-message-chip {
+  align-self: center;
+  margin-bottom: 10rpx;
+  padding: 10rpx 22rpx;
+  border-radius: 99rpx;
+  color: #ffffff;
+  background: #0b6b58;
+  font-size: 20rpx;
+  box-shadow: 0 6rpx 18rpx rgba(11, 107, 88, 0.25);
+}
+
+.message-line {
+  margin-bottom: 20rpx;
+}
+
+.message-system {
+  justify-content: center;
+}
+
+.system-message {
+  max-width: 80%;
+  padding: 10rpx 18rpx;
+  border-radius: 99rpx;
+  color: #899893;
+  background: #e8eeeb;
+  font-size: 19rpx;
+  text-align: center;
+}
+
+.message-self {
+  justify-content: flex-end;
+}
+
+.chat-avatar {
+  flex: none;
+  width: 58rpx;
+  height: 58rpx;
+  margin-right: 14rpx;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #0b6b58;
+  line-height: 58rpx;
+  text-align: center;
+  font-weight: 700;
+  object-fit: cover;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 16rpx 20rpx 10rpx;
+  border-radius: 8rpx 22rpx 22rpx 22rpx;
+  background: #ffffff;
+  box-shadow: 0 5rpx 16rpx rgba(13, 73, 60, 0.06);
+}
+
+.message-self .message-bubble {
+  color: #ffffff;
+  border-radius: 22rpx 8rpx 22rpx 22rpx;
+  background: #0b6b58;
+}
+
+.message-text {
+  line-height: 1.5;
+}
+
+.message-time {
+  margin-top: 5rpx;
+  color: #9aa7a2;
+  font-size: 18rpx;
+  text-align: right;
+}
+
+.message-self .message-time {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.message-composer {
+  gap: 14rpx;
+  padding: 18rpx 24rpx 28rpx;
+  border-top: 1rpx solid #dce7e2;
+  background: #ffffff;
+}
+
+.composer-input {
+  flex: 1;
+  min-width: 0;
+  height: 72rpx;
+  padding: 0 22rpx;
+  border-radius: 99rpx;
+  background: #f1f5f3;
+}
+
+.send-button {
+  flex: none;
+  padding: 0 28rpx;
+  color: #ffffff;
+  background: #0b5c4d;
+}
+
+.group-chat-card {
+  border-color: #0d7a67;
+}
+
+.older-button {
+  width: 240rpx;
+  margin: 8rpx auto 24rpx;
+  background: #eef4f1;
+  color: #075e54;
+  font-size: 23rpx;
+}
+
+.message-sender {
+  margin-bottom: 6rpx;
+  color: #71807b;
+  font-size: 20rpx;
+}
+

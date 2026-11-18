@@ -1,0 +1,87 @@
+<view class="page publish-page">
+  <view class="publish-intro">
+    <view class="intro-eyebrow">CREATE A RIDE</view>
+    <view class="intro-title">发布你的行程</view>
+    <view class="intro-desc">发布到 {{schoolName}}，寻找同校同行伙伴</view>
+  </view>
+
+  <view class="form-card card">
+    <view class="form-section">
+      <view class="field-label">行程方向</view>
+      <view class="option-row option-row-three">
+        <view
+          wx:for="{{directions}}"
+          wx:key="*this"
+          class="option {{form.direction === item ? 'option-selected' : ''}}"
+          data-value="{{item}}"
+          bindtap="selectDirection"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <view class="form-section route-section">
+      <view class="field-label">路线信息</view>
+      <view class="route-input-row">
+        <view class="route-marker marker-start"></view>
+        <input class="text-input {{form.direction === '出校' ? 'text-input-locked' : ''}}" placeholder="{{form.direction === '出校' ? '已自动使用学校名称' : '出发地点（必填）'}}" value="{{form.from}}" data-field="from" bindinput="onInput" maxlength="30" disabled="{{form.direction === '出校'}}" />
+      </view>
+      <view class="route-connector"></view>
+      <view class="route-input-row">
+        <view class="route-marker marker-end"></view>
+        <input class="text-input {{form.direction === '返校' ? 'text-input-locked' : ''}}" placeholder="{{form.direction === '返校' ? '已自动使用学校名称' : '目的地点（必填）'}}" value="{{form.to}}" data-field="to" bindinput="onInput" maxlength="30" disabled="{{form.direction === '返校'}}" />
+      </view>
+      <view wx:if="{{form.direction !== '周边'}}" class="route-auto-note">学校端已自动使用「{{schoolName}}」，无需重复填写。</view>
+    </view>
+
+    <view class="form-section field-grid">
+      <view class="grid-field">
+        <view class="field-label">出发日期</view>
+        <picker mode="date" value="{{form.date}}" bindchange="onDateChange">
+          <view class="picker-value">{{form.date}}</view>
+        </picker>
+      </view>
+      <view class="grid-field">
+        <view class="field-label">出发时间</view>
+        <picker mode="time" value="{{form.time}}" bindchange="onTimeChange">
+          <view class="picker-value">{{form.time}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="time-default-tip">出发时间默认 30 分钟后，可直接修改；发车后不能再加入或退出。</view>
+
+    <view class="form-section">
+      <view class="field-label">可用座位</view>
+      <view class="stepper">
+        <view class="step-button" data-delta="-1" bindtap="changeSeats">−</view>
+        <view class="step-value">{{form.seats}}</view>
+        <view class="step-button" data-delta="1" bindtap="changeSeats">＋</view>
+      </view>
+    </view>
+
+    <view class="form-section">
+      <view class="field-label">发布人</view>
+      <view class="owner-readonly">
+        <view class="owner-name">{{form.owner || '尚未设置称呼'}}</view>
+        <view class="owner-edit" bindtap="goProfile">修改</view>
+      </view>
+      <view class="field-help">称呼自动使用“我的”页面名称，同行人看到的就是这个名称。</view>
+    </view>
+
+    <view class="form-section">
+      <view class="field-label">补充说明</view>
+      <textarea class="note-input" placeholder="行李、集合方式、可等待时间等（请勿填写真实联系方式）" value="{{form.note}}" data-field="note" bindinput="onInput" maxlength="120"></textarea>
+      <view class="character-count">{{form.note.length}}/120</view>
+    </view>
+  </view>
+
+  <view class="publish-actions card">
+    <view class="publish-actions-copy">
+      <view class="publish-actions-title">{{cloudConnected ? '确认信息后即可发布' : '云端暂不可用'}}</view>
+      <view class="publish-actions-desc">{{cloudConnected ? '发布后会创建拼车团，成员可查看路线并加入群聊。' : '当前行程不会保存，请恢复连接后重试。'}}</view>
+    </view>
+    <button class="primary-button publish-submit-button" loading="{{submitting}}" disabled="{{submitting || !cloudConnected}}" bindtap="submitRide">
+      <view class="button-label">{{submitting ? '正在发布…' : '确认发布'}}</view>
+    </button>
+  </view>
+</view>
+

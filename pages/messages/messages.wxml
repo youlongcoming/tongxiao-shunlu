@@ -1,0 +1,164 @@
+<view class="page messages-page">
+  <view class="messages-hero">
+    <view class="hero-eyebrow">CARPOOL COMMUNITY</view>
+    <view class="hero-title">消息与搭子</view>
+    <view class="hero-subtitle">管理拼车沟通、群组和常用同行伙伴</view>
+  </view>
+
+  <view class="demo-banner {{cloudConnected ? 'cloud-banner' : ''}}">{{cloudMessage}}</view>
+
+  <view wx:if="{{cloudConnected}}" class="reminder-strip" bindtap="enableMessageReminder">
+    <view class="reminder-copy">
+      <view class="reminder-heading">
+        <text class="reminder-title">微信消息提醒</text>
+        <text class="reminder-status">{{subscribeTemplateReady ? '可开启' : '待配置'}}</text>
+      </view>
+      <view class="reminder-caption">有人加入你的拼车团时通知你，每次授权对应一次通知</view>
+    </view>
+    <view class="reminder-action">{{subscribeTemplateReady ? '开启' : '配置'}}<text class="reminder-arrow">›</text></view>
+  </view>
+
+  <view wx:if="{{cloudConnected}}" class="add-buddy-card card">
+    <view class="add-buddy-top">
+      <view>
+        <view class="add-buddy-title">添加拼车搭子</view>
+        <view class="add-buddy-caption">输入对方在“我的”页面显示的搭子码</view>
+      </view>
+      <view class="my-code {{friendCodeNeedsRefresh ? 'my-code-pending' : ''}}" bindtap="copyFriendCode">
+        <block wx:if="{{myFriendCode}}">我的搭子码：{{myFriendCode}}</block>
+        <block wx:else>更新搭子码</block>
+      </view>
+    </view>
+    <view class="code-input-row">
+      <input class="code-input" placeholder="例如 CP-A1B2C3" value="{{friendCode}}" bindinput="onFriendCodeInput" maxlength="10" />
+      <button class="code-button" size="mini" loading="{{cloudLoading}}" bindtap="sendBuddyRequest">发送申请</button>
+    </view>
+  </view>
+
+  <block wx:if="{{cloudConnected && incomingRequests.length}}">
+    <view class="section-heading">
+      <view class="section-name">新的搭子申请</view>
+      <view class="section-count">{{incomingRequests.length}}</view>
+    </view>
+    <view wx:for="{{incomingRequests}}" wx:key="requestId" class="request-row card">
+      <image wx:if="{{item.user.avatar}}" class="request-avatar" src="{{item.user.avatar}}" mode="aspectFill"></image>
+      <view wx:else class="request-avatar request-avatar-text">{{item.user.initial}}</view>
+      <view class="request-info">
+        <view class="request-name">{{item.user.name}}</view>
+        <view class="request-message">{{item.message || '想和你成为拼车搭子'}}</view>
+      </view>
+      <view class="request-actions">
+        <view class="request-button reject-button" data-id="{{item.requestId}}" data-action="reject" bindtap="handleBuddyRequest">拒绝</view>
+        <view class="request-button accept-button" data-id="{{item.requestId}}" data-action="accept" bindtap="handleBuddyRequest">接受</view>
+      </view>
+    </view>
+  </block>
+
+  <view class="section-heading">
+    <view class="section-name">拼车对话</view>
+    <view class="section-count">{{conversations.length}}</view>
+  </view>
+  <view wx:if="{{conversations.length}}">
+    <view
+      wx:for="{{conversations}}"
+      wx:key="id"
+      class="message-row card"
+      data-id="{{item.rideId}}"
+      data-ride-id="{{item.rideId}}"
+      data-group="{{item.isGroup}}"
+      data-user-id="{{item.userId}}"
+      bindtap="openChat"
+    >
+      <image wx:if="{{!item.isGroup && item.otherUser.avatar}}" class="row-avatar" src="{{item.otherUser.avatar}}" mode="aspectFill"></image>
+      <view wx:else class="row-avatar">{{item.avatarText}}</view>
+      <view class="row-content">
+        <view class="row-top">
+          <view class="row-name">{{item.displayName}}</view>
+          <view wx:if="{{item.unreadCount}}" class="unread-badge">{{item.unreadCount > 99 ? '99+' : item.unreadCount}}</view>
+          <view wx:else class="row-arrow">›</view>
+        </view>
+        <view class="row-route">{{item.displaySubtitle}}</view>
+        <view class="row-message">{{item.lastMessage || '开始聊天吧'}}</view>
+        <view class="row-actions">
+          <view
+            wx:if="{{item.contactPhone}}"
+            class="phone-action"
+            data-phone="{{item.contactPhone}}"
+            data-name="{{item.contactName}}"
+            catchtap="callContact"
+          >电话联系</view>
+          <view wx:else class="phone-action phone-action-disabled">未留电话</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view wx:else class="mini-empty card" bindtap="goFindRide">还没有对话，先添加搭子或联系同行伙伴 →</view>
+
+  <view class="section-heading">
+    <view class="section-name">已加入的拼车团</view>
+    <view class="section-count">{{groups.length}}</view>
+  </view>
+  <view wx:if="{{groups.length}}" class="group-grid">
+    <view
+      wx:for="{{groups}}"
+      wx:key="id"
+      class="group-card card"
+      data-id="{{item.id}}"
+      bindtap="openGroup"
+    >
+      <view class="group-card-head">
+        <view class="group-icon">拼车</view>
+        <view class="group-status group-status-{{item.statusTone}} {{item.status === 'settling' ? 'group-status-settling' : ''}}">{{item.status === 'settling' ? '待结算' : item.seatsLabel}}</view>
+      </view>
+      <view class="group-title">{{item.to}} 拼车团</view>
+      <view class="group-route">{{item.date}} · {{item.time}}</view>
+      <view class="group-owner">发起人：{{item.owner}}</view>
+      <view
+        wx:if="{{item.ownerPhone}}"
+        class="group-call"
+        data-phone="{{item.ownerPhone}}"
+        data-name="{{item.owner}}"
+        catchtap="callContact"
+      >电话联系发起人</view>
+      <view class="group-cloud-label">查看成员并添加搭子 →</view>
+    </view>
+  </view>
+  <view wx:else class="mini-empty card">联系行程发布者后，可以申请加入拼车团</view>
+
+  <view class="section-heading">
+    <view class="section-name">我的拼车搭子</view>
+    <view class="section-count">{{buddies.length}}</view>
+  </view>
+  <view wx:if="{{buddies.length}}">
+    <view
+      wx:for="{{buddies}}"
+      wx:key="relationId"
+      class="buddy-row card"
+      data-id="{{item.rideId}}"
+      data-user-id="{{item.user.userId}}"
+      bindtap="openChat"
+    >
+      <image wx:if="{{item.user.avatar}}" class="buddy-avatar" src="{{item.user.avatar}}" mode="aspectFill"></image>
+      <view wx:else class="buddy-avatar">{{item.user.initial}}</view>
+      <view class="buddy-info">
+        <view class="buddy-name">{{item.user.name}}</view>
+        <view class="buddy-note">{{item.displayNote}}</view>
+      </view>
+      <view class="buddy-row-actions">
+        <view class="row-arrow">›</view>
+        <button
+          class="buddy-delete-button"
+          size="mini"
+          data-relation-id="{{item.relationId}}"
+          data-user-id="{{item.user.userId}}"
+          data-name="{{item.user.name}}"
+          catchtap="deleteBuddy"
+        >删除</button>
+      </view>
+    </view>
+  </view>
+  <view wx:else class="mini-empty card">把聊得来的同学添加为搭子，方便以后再次同行</view>
+
+  <button wx:if="{{cloudConnected && hasMoreCloud}}" class="load-more-button" loading="{{cloudLoading}}" bindtap="loadMoreCloudData">加载更多云端记录</button>
+</view>
+
